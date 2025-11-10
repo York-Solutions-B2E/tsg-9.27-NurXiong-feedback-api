@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: feedback_postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: feedbackdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  kafka:
+    image: confluentinc/confluent-local:latest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_PROCESS_ROLES: "broker,controller"        # Run both the broker and controller in the same node
+      KAFKA_NODE_ID: 1                                 # Unique node ID for this broker/controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"  # Define the KRaft quorum (single-node for dev)
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093" # Expose broker + controller listeners
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092" # How clients on the host reach Kafka
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_DIRS: "/tmp/kraft-combined-logs"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    healthcheck:
+      test:
+        [ "CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list" ]
+      interval: 10s
+      timeout: 5s
+
+volumes:
+  postgres_data:
+
+
+
+
+
+
+
