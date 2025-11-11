@@ -35,7 +35,10 @@ public class FeedbackService {
         // Will use If statements to populate list of validation errors
         List<ValidationError> errors = new ArrayList<>();
 
-        if(requestDto == null) errors.add(new ValidationError("No Feedback", "Feedback Request can't be null"));
+        if(requestDto == null){
+            errors.add(new ValidationError("No Feedback", "Feedback Request can't be null"));
+            throw new ValidationException(errors);
+        }
 
         if(requestDto.getMemberId() == null || requestDto.getMemberId().isEmpty() || requestDto.getMemberId().length() > 36){
             errors.add(new ValidationError("Member Id", "Member Id can't be empty and can't exceed 36 characters"));
@@ -64,7 +67,14 @@ public class FeedbackService {
 
         feedbackEventPublisher.publishFeedback(feedback);
 
-        return new FeedbackResponse(feedback.getMemberId(), feedback.getSubmittedAt());
+        return new FeedbackResponse(
+                feedback.getId().toString(),
+                feedback.getMemberId(),
+                feedback.getProviderName(),
+                feedback.getRating(),
+                feedback.getComment(),
+                feedback.getSubmittedAt()
+        );
 
     }
 

@@ -1,4 +1,4 @@
-package net.tsg_projects.feedbackapi.SecurityConfig;
+package net.tsg_projects.feedbackapi.securityConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
 
                 //Disable basic auth and form login
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable());
         return http.build();
     }

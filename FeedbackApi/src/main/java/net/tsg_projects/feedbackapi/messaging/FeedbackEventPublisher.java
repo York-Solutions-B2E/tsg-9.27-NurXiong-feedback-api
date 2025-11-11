@@ -29,7 +29,7 @@ public class FeedbackEventPublisher {
         FeedbackEvent event = feedbackMapper.toFeedbackEvent(entity);
         event.setId(entity.getId().toString());
 
-        log.info("[PUBLISHING] feedback event ---> {} WITH [ID]: {}",submittedTopic, event.getId());
+        log.info("[PUBLISHING] feedback event to \n[TOPIC] ---> {} \n[ID]: {}",submittedTopic, event.getId());
         kafkaTemplate.send(submittedTopic, event.getId(), event);
 
     }

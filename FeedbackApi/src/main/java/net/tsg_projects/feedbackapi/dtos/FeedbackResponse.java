@@ -10,8 +10,10 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackResponse {
-
+    private String id;
     private String memberId;
+    private String providerName;
+    private int rating;
+    private String comment;
     private Instant submittedAt;
-
 }

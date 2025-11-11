@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -42,5 +43,15 @@ public class GlobalExceptionHandler {
                 "Message", ex.getMessage()
         );
         return ResponseEntity.status(404).body(Map.of("Error", errorJson, "Status", 404, "Timestamp", Instant.now()));
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        Map<String, Object> errorJson = Map.of(
+                "Field", "404 Not Found",
+                "Message", "No specified handler for that path!",
+                "Status", 404
+        );
+        return ResponseEntity.status(404).body(errorJson);
     }
 }
