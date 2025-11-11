@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,9 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(Map.of("FeedbackList", feedbackList, "MemberId", memberId, "Count", feedbackList.size()));
     }
 
-
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> getHealth(){
+        return ResponseEntity.status(200).body(Map.of("Health", "Healthy - Server Listening...", "Status", "OK", "TimeStamp", Instant.now()));
+    }
 
 }
