@@ -1,10 +1,5 @@
-package net.tsg_projects.feedbackapi.services;
+package net.tsg_projects.feedbackapi.Validation;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.tsg_projects.feedbackapi.Validation.ValidationError;
-import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
 import java.util.List;
 public class ValidationException extends RuntimeException {
 

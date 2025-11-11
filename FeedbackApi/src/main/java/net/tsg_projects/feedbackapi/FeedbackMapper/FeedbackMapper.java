@@ -1,6 +1,7 @@
 package net.tsg_projects.feedbackapi.FeedbackMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.tsg_projects.feedbackapi.dtos.FeedbackEntityDto;
 import net.tsg_projects.feedbackapi.dtos.FeedbackRequest;
 import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
 import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
@@ -32,5 +33,13 @@ public class FeedbackMapper {
 
     public FeedbackEvent toFeedbackEvent(FeedbackEntity feedbackEntity) {
         return objectMapper.convertValue(feedbackEntity, FeedbackEvent.class);
+    }
+
+    public Object toGetResponseObject(FeedbackEntity feedbackEntity) {
+        return objectMapper.convertValue(feedbackEntity, Object.class);
+    }
+
+    public FeedbackEntityDto toGetResponseDto(FeedbackEntity feedbackEntity) {
+        return objectMapper.convertValue(feedbackEntity, FeedbackEntityDto.class);
     }
 }

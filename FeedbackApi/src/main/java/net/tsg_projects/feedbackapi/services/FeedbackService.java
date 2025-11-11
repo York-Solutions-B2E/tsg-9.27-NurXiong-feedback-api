@@ -3,17 +3,18 @@ package net.tsg_projects.feedbackapi.services;
 
 import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
 import net.tsg_projects.feedbackapi.Validation.ValidationError;
+import net.tsg_projects.feedbackapi.Validation.ValidationException;
+import net.tsg_projects.feedbackapi.dtos.FeedbackEntityDto;
 import net.tsg_projects.feedbackapi.dtos.FeedbackRequest;
 import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
 import net.tsg_projects.feedbackapi.messaging.FeedbackEventPublisher;
 import net.tsg_projects.feedbackapi.repositories.FeedbackRepository;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FeedbackService {
@@ -64,6 +65,58 @@ public class FeedbackService {
         feedbackEventPublisher.publishFeedback(feedback);
 
         return new FeedbackResponse(feedback.getMemberId(), feedback.getSubmittedAt());
+
+    }
+
+    public FeedbackEntityDto getFeedback(String ID){
+        try {
+                UUID entityId = UUID.fromString(ID);
+                FeedbackEntity feedback = feedbackRepository.findById(entityId).orElse(null);
+
+                if(feedback == null) {
+                    // If the given UUID is not in the database throw RNFe
+                    throw new ResourceNotFoundException("Feedback Not Found " + entityId);
+                }
+                else {
+                    // If no exceptions are thrown just return an Object with feedback details
+                    // Mapped from DB Entity --> Object
+                    return feedbackMapper.toGetResponseDto(feedback);
+                }
+
+        } catch (IllegalArgumentException e){
+            // If converting Id paramater to UUID failed throw VALIDATIONEXCEPTION -
+            // Pass a new ValidationError object to map key and value
+            throw new ValidationException(Collections.singletonList(new ValidationError("Feedback ID", "Invalid UUID format or empty ID")));
+        } catch (ResourceNotFoundException e){
+            // Finally catch and through exception we through in the if block
+            // GlobalExceptionHandler listens for these exceptions and handles accordingly
+            throw e;
+        }
+
+    }
+
+    public List<FeedbackEntityDto> getFeedbackList(String memberId){
+
+       try {
+           if(memberId == null || memberId.isEmpty()){
+               throw new ValidationException(Collections.singletonList(new ValidationError("Member Id", "Member Id can not be null or empty")));
+           }
+
+           List<FeedbackEntity> entityList = feedbackRepository.findAllByMemberId(memberId);
+
+           if(entityList.isEmpty()){
+               // then return only 200 status code OK in controller
+               throw new ResourceNotFoundException("Feedback Not Found MemberId " + memberId);
+           }  else {
+               return entityList.stream().map(feedbackMapper::toGetResponseDto).toList();
+           }
+
+       } catch (ValidationException | ResourceNotFoundException e) {
+                throw e;
+       } catch (Exception e){
+           // In case of anything unexpected
+           throw new RuntimeException("Unexpected error while retrieving feedback for memberId: " + memberId, e);
+       }
 
     }
 }
