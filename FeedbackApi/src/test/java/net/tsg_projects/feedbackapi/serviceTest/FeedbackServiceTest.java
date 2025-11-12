@@ -47,11 +47,10 @@ public class FeedbackServiceTest {
         );
 
 
-        // Create a mock FeedbackEntity that your mapper and repository will return
 
         FeedbackEntity mockEntity = new FeedbackEntity();
         mockEntity.setId(UUID.randomUUID());
-        mockEntity.setMemberId(request.getMemberId());  // <-- match request value
+        mockEntity.setMemberId(request.getMemberId());
         mockEntity.setProviderName(request.getProviderName());
         mockEntity.setRating(request.getRating());
         mockEntity.setComment(request.getComment());
@@ -84,7 +83,6 @@ public class FeedbackServiceTest {
         assertEquals(response.getComment(), request.getComment());
         //Verify timestamp is in the past
         assertTrue(response.getSubmittedAt().isBefore(Instant.now()));
-
 
     }
 
@@ -137,7 +135,7 @@ public class FeedbackServiceTest {
     }
 
     @Test
-    public void shouldThrowValidationExceptionForEachInvalidRequest() {
+    public void handleFeedbackRequest_shouldThrowValidationExceptionForEachInvalidRequest() {
         List<FeedbackRequest> invalidRequests = List.of(
                 new FeedbackRequest(" ", "Dr. Smith", 5, "Great service!"),
                 new FeedbackRequest("M12345", "  ", 4, "Provider name missing"),
