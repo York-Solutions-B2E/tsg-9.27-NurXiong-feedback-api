@@ -1,16 +1,16 @@
 package net.tsg_projects.feedbackapi.repositories.entities;
 
 
-import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.UuidGenerator;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Max;
-
-
-import java.security.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.Data;
 
 @Entity
 @Data

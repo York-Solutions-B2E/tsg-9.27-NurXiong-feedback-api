@@ -1,13 +1,13 @@
 package net.tsg_projects.feedbackapi.messaging;
 
-import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
-import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
-import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
+import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
+import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 
 @Component
 public class FeedbackEventPublisher {
@@ -29,7 +29,18 @@ public class FeedbackEventPublisher {
         FeedbackEvent event = feedbackMapper.toFeedbackEvent(entity);
         event.setId(entity.getId().toString());
 
-        log.info("[PUBLISHING] feedback event to \n[TOPIC] ---> {} \n[ID]: {}",submittedTopic, event.getId());
+        log.info("""
+                
+                
+                ********************** Kakfa Publishing **********************\
+                
+                [PUBLISHING] (FeedbackEvent) \
+                
+                [TOPIC-NAME] ---> {}\s
+                
+                [EVENT-ID]: ---> {}
+                
+                ****************************************************************""",submittedTopic, event.getId());
         kafkaTemplate.send(submittedTopic, event.getId(), event);
 
     }

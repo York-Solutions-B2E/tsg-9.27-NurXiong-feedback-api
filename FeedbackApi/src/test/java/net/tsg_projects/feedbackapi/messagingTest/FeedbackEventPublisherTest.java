@@ -62,4 +62,23 @@ public class FeedbackEventPublisherTest {
         verify(feedbackMapper).toFeedbackEvent(feedbackEntity);
         verify(kafkaTemplate).send(anyString(), eq(feedbackEvent.getId()), eq(feedbackEvent));
     }
+
+//    @Test
+//    public void publishEvent_InvalidEvent_ShouldNotPublishFeedbackEvent()
+//    {
+//        //Arrange
+//        FeedbackEntity feedbackEntity = new FeedbackEntity(
+//                UUID.randomUUID(),
+//                "",
+//                "",
+//                5,
+//                "",
+//                Instant.now()
+//        );
+//
+//        FeedbackEvent feedbackEvent = new FeedbackEvent();
+//        feedbackEvent.setId(feedbackEntity.getId().toString());
+//        when(feedbackMapper.toFeedbackEvent(feedbackEntity)).thenReturn(feedbackEvent);
+//
+//    }
 }

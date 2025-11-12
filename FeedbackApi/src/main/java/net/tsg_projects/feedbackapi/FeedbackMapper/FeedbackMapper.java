@@ -1,12 +1,12 @@
 package net.tsg_projects.feedbackapi.FeedbackMapper;
 
+import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.tsg_projects.feedbackapi.dtos.FeedbackEntityDto;
 import net.tsg_projects.feedbackapi.dtos.FeedbackRequest;
 import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
 import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
-import org.springframework.stereotype.Component;
 
 @Component
 public class FeedbackMapper {

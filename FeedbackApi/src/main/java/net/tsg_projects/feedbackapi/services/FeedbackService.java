@@ -1,6 +1,12 @@
 package net.tsg_projects.feedbackapi.services;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
 import net.tsg_projects.feedbackapi.Validation.ValidationError;
 import net.tsg_projects.feedbackapi.Validation.ValidationException;
@@ -10,11 +16,6 @@ import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
 import net.tsg_projects.feedbackapi.messaging.FeedbackEventPublisher;
 import net.tsg_projects.feedbackapi.repositories.FeedbackRepository;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 public class FeedbackService {
@@ -30,6 +31,29 @@ public class FeedbackService {
     }
 
     public FeedbackResponse handleFeedbackRequest(FeedbackRequest requestDto){
+
+        // Will validate incoming request first
+        // If no exceptions are thrown continue on
+        FeedbackValidation(requestDto);
+
+        // Validation Complete moving on to Entity creation
+        FeedbackEntity feedback = feedbackMapper.toEntity(requestDto);
+        feedbackRepository.save(feedback);
+
+        feedbackEventPublisher.publishFeedback(feedback);
+
+        return new FeedbackResponse(
+                feedback.getId().toString(),
+                feedback.getMemberId(),
+                feedback.getProviderName(),
+                feedback.getRating(),
+                feedback.getComment(),
+                feedback.getSubmittedAt()
+        );
+
+    }
+
+    public void FeedbackValidation(FeedbackRequest requestDto){
 
         // Begin Validating incoming request
         // Will use If statements to populate list of validation errors
@@ -60,22 +84,6 @@ public class FeedbackService {
         if(!errors.isEmpty()){
             throw new ValidationException(errors);
         }
-
-        // Validation Complete moving on to Entity creation
-        FeedbackEntity feedback = feedbackMapper.toEntity(requestDto);
-        feedbackRepository.save(feedback);
-
-        feedbackEventPublisher.publishFeedback(feedback);
-
-        return new FeedbackResponse(
-                feedback.getId().toString(),
-                feedback.getMemberId(),
-                feedback.getProviderName(),
-                feedback.getRating(),
-                feedback.getComment(),
-                feedback.getSubmittedAt()
-        );
-
     }
 
     public FeedbackEntityDto getFeedback(String ID){
