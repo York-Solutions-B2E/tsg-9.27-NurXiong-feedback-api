@@ -40,11 +40,11 @@ public class FeedbackService {
             throw new ValidationException(errors);
         }
 
-        if(requestDto.getMemberId() == null || requestDto.getMemberId().isEmpty() || requestDto.getMemberId().length() > 36){
+        if(requestDto.getMemberId() == null || requestDto.getMemberId().isEmpty() || requestDto.getMemberId().isBlank() || requestDto.getMemberId().length() > 36){
             errors.add(new ValidationError("Member Id", "Member Id can't be empty and can't exceed 36 characters"));
         }
 
-        if(requestDto.getProviderName() == null || requestDto.getProviderName().isEmpty() || requestDto.getProviderName().length() > 80) {
+        if(requestDto.getProviderName() == null || requestDto.getProviderName().isEmpty() || requestDto.getProviderName().isBlank() || requestDto.getProviderName().length() > 80) {
             errors.add(new ValidationError("Provider Name", "Provider Name can't be empty and can't exceed 80 characters"));
         }
 
