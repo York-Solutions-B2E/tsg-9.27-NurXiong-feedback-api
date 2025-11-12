@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1")
 public class FeedbackController {
