@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import net.tsg_projects.feedbackapi.dtos.FeedbackEntityDto;
 import net.tsg_projects.feedbackapi.dtos.FeedbackRequest;
 import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
@@ -32,7 +33,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/feedback/{id}")
-    public ResponseEntity<Map<String, FeedbackEntityDto>> getFeedback(@Valid @PathVariable String id){
+    public ResponseEntity<Map<String, FeedbackEntityDto>> getFeedbackById(@Valid @NotBlank @PathVariable String id){
         FeedbackEntityDto response  = feedbackService.getFeedback(id);
         return ResponseEntity.status(200).body(Map.of("Feedback", response));
     }
@@ -45,7 +46,7 @@ public class FeedbackController {
 
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> getHealth(){
-        return ResponseEntity.status(200).body(Map.of("Health", "Healthy - Server Listening...", "Status", "OK", "TimeStamp", Instant.now()));
+        return ResponseEntity.status(200).body(Map.of("Name", "feedback-api", "Status", "UP", "TimeStamp", Instant.now()));
     }
 
 }

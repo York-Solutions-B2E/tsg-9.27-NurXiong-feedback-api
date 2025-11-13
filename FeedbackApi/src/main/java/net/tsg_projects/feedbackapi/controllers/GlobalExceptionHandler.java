@@ -1,16 +1,18 @@
 package net.tsg_projects.feedbackapi.controllers;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import net.tsg_projects.feedbackapi.Validation.ValidationError;
 import net.tsg_projects.feedbackapi.Validation.ValidationException;
+import net.tsg_projects.feedbackapi.dtos.ErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -43,13 +45,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(Map.of("Error", errorJson, "Status", 404, "Timestamp", Instant.now()));
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
-        Map<String, Object> errorJson = Map.of(
-                "Field", "404 Not Found",
-                "Message", "No specified handler for that path!",
-                "Status", 404
-        );
-        return ResponseEntity.status(404).body(errorJson);
+//    @ExceptionHandler(NoHandlerFoundException.class)
+//    public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+//        Map<String, Object> errorJson = Map.of(
+//                "Field", "404 Not Found",
+//                "Message", "No specified handler for that path!",
+//                "Status", 404
+//        );
+//        return ResponseEntity.status(404).body(errorJson);
+//    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        Map<String, Object> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        });
+        ErrorResponse error = new ErrorResponse("Validation Failed @ Controller", errors);
+        return ResponseEntity.status(400).body(error);
     }
 }

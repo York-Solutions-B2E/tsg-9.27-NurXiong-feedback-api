@@ -1,24 +1,22 @@
 package net.tsg_projects.feedbackapi.messagingTest;
 
+import java.time.Instant;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
 import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
 import net.tsg_projects.feedbackapi.messaging.FeedbackEventPublisher;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.kafka.core.KafkaTemplate;
-
-import java.time.Instant;
-import java.util.UUID;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class FeedbackEventPublisherTest {
