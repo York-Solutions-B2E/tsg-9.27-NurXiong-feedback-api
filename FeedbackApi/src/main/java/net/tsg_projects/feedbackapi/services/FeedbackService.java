@@ -123,13 +123,12 @@ public class FeedbackService {
            List<FeedbackEntity> entityList = feedbackRepository.findAllByMemberId(memberId);
 
            if(entityList.isEmpty()){
-               // then return only 200 status code OK in controller
-               throw new ResourceNotFoundException("Feedback Not Found MemberId " + memberId);
+               return Collections.emptyList();
            }  else {
                return entityList.stream().map(feedbackMapper::toGetResponseDto).toList();
            }
 
-       } catch (ValidationException | ResourceNotFoundException e) {
+       } catch (ValidationException e) {
                 throw e;
        } catch (Exception e){
            // In case of anything unexpected

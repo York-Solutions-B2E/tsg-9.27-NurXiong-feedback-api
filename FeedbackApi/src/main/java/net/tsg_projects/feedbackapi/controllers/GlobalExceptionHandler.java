@@ -2,6 +2,7 @@ package net.tsg_projects.feedbackapi.controllers;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -40,20 +41,12 @@ public class GlobalExceptionHandler {
 //        ValidationError error = new ValidationError("ResourceNotFoundException", "Resource not found!");
         Map<String, Object> errorJson = Map.of(
                 "Field", "Resource not found",
-                "Message", ex.getMessage()
+                "Message", ex.getMessage(),
+                "EmptyList", List.of()
         );
-        return ResponseEntity.status(404).body(Map.of("Error", errorJson, "Status", 404, "Timestamp", Instant.now()));
+        return ResponseEntity.status(200).body(Map.of("NoFeedbacks", errorJson, "Status", 200, "Timestamp", Instant.now()));
     }
 
-//    @ExceptionHandler(NoHandlerFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
-//        Map<String, Object> errorJson = Map.of(
-//                "Field", "404 Not Found",
-//                "Message", "No specified handler for that path!",
-//                "Status", 404
-//        );
-//        return ResponseEntity.status(404).body(errorJson);
-//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {

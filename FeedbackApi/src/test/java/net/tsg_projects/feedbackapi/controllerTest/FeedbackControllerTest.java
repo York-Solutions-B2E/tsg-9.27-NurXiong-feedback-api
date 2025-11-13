@@ -41,12 +41,6 @@ public class FeedbackControllerTest {
     private ObjectMapper objectMapper;
 
 
-
-    @BeforeEach
-    public void setup(){
-
-    }
-
     @Test
     public void tesPostFeedback_HappyPath() throws Exception {
         FeedbackRequest mockRequest = new FeedbackRequest(
@@ -138,7 +132,7 @@ public class FeedbackControllerTest {
     }
 
     @Test
-    public void testHealth() throws Exception {
+    public void testHealth_HappyPath() throws Exception {
 
         mockMvc.perform(get("/api/v1/health")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -170,7 +164,5 @@ public class FeedbackControllerTest {
                 .andExpect(status().isBadRequest());
         verifyNoInteractions(feedbackService);
     }
-
-
 
 }
