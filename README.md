@@ -9,6 +9,19 @@ and publishing to kafka topic
 - Persists Feedback to Postgres (repo layer).
 - Publishes a compact event to Kafka topic feedback-submitted.
 
+## Tech Stack
+
+**Server:** Springboot 3.9
+
+**Build System** Maven
+
+**Containerization** Docker
+
+**Message Broker** Kafka
+
+**Database** Postgres
+
+
 
 ## Prerequesites
 
@@ -18,7 +31,7 @@ and publishing to kafka topic
 
 - Ports 8080, 9092, 5432
 
-- **local postgres be shutdown as to not conflict** 
+- **local postgres be shutdown as to not conflict**
 
 
 ## API Reference
@@ -92,21 +105,7 @@ mvn test
 
 
 
-  
-    
 
-
-## Tech Stack
-
-**Server:** Springboot 3.9
-
-**Build System** Maven
-
-**Containerization** Docker
-
-**Message Broker** Kafka
-
-**Database** Postgres
 
 
 
