@@ -13,6 +13,7 @@ import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 public class FeedbackEventPublisher {
 
     private static final Logger log = LoggerFactory.getLogger(FeedbackEventPublisher.class);
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final FeedbackMapper feedbackMapper;
 

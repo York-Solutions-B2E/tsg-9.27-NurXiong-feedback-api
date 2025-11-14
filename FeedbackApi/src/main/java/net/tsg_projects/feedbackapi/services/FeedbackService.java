@@ -76,8 +76,8 @@ public class FeedbackService {
             errors.add(new ValidationError("Rating", "Rating can't be less than 1 or greater than 5"));
         }
 
-        if(requestDto.getComment() == null || requestDto.getComment().isEmpty() || requestDto.getComment().length() > 200) {
-            errors.add(new ValidationError("Comment", "Comment can't be empty and can't exceed 200 characters"));
+        if(requestDto.getComment().length() > 200) {
+            errors.add(new ValidationError("Comment", "Comment can't exceed 200 characters"));
         }
 
         // If the list is not empty throw new Validation Exception

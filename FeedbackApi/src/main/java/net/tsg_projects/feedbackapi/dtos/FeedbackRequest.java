@@ -25,7 +25,6 @@ public class FeedbackRequest {
     @Max(5)
     private int rating;
 
-    @NotBlank
     @Size(max = 200)
     private String comment;
 

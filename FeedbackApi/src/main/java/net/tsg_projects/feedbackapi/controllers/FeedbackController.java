@@ -35,7 +35,7 @@ public class FeedbackController {
      *
      *
      * @param feedbackRequest
-     * @return FeeedbackResponse
+     * @return status: 201, body: FeeedbackResponse
      */
     @ApiResponse(responseCode = "201", description = "Feedback created, Feedback Event published to " +
             "feedback-submitted topic.", content = { @Content(mediaType = "application/json",
@@ -69,7 +69,7 @@ public class FeedbackController {
     /**
      *
      * @param memberId
-     * @return status: 200, list of feedbacks for memberId
+     * @return status: 200, body: list of feedbacks for memberId
      */
     @ApiResponse(responseCode = "200", description = "Get list of feedbacks using Param memberId",
                                         content = { @Content(mediaType = "application/json",

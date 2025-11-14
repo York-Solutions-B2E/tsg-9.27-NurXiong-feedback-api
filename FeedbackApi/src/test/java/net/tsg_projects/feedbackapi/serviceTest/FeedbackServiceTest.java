@@ -124,7 +124,8 @@ public class FeedbackServiceTest {
 
     @Test
     public void handleFeedbackRequest_InvalidComment_ShouldIncludeCommentError() {
-        FeedbackRequest invalidRequest = new FeedbackRequest("M12345", "Dr. Smith", 5, "");
+        String comment = "a".repeat(201);
+        FeedbackRequest invalidRequest = new FeedbackRequest("M12345", "Dr. Smith", 5, comment);
         ValidationException exception = assertThrows(ValidationException.class, () -> {
             service.handleFeedbackRequest(invalidRequest);
         });
@@ -134,11 +135,12 @@ public class FeedbackServiceTest {
 
     @Test
     public void handleFeedbackRequest_shouldThrowValidationExceptionForEachInvalidRequest() {
+        String comment =  "a".repeat(201);
         List<FeedbackRequest> invalidRequests = List.of(
                 new FeedbackRequest(" ", "Dr. Smith", 5, "Great service!"),
                 new FeedbackRequest("M12345", "  ", 4, "Provider name missing"),
                 new FeedbackRequest("M12345", "Dr. Smith", 8, "Too high rating"),
-                new FeedbackRequest("M12345", "Dr. Smith", 5, "")
+                new FeedbackRequest("M12345", "Dr. Smith", 5, comment)
         );
 
         for (FeedbackRequest request : invalidRequests) {
