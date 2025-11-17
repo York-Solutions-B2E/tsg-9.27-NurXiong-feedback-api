@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
 import net.tsg_projects.feedbackapi.Validation.ValidationError;
 import net.tsg_projects.feedbackapi.Validation.ValidationException;
@@ -21,6 +22,8 @@ import net.tsg_projects.feedbackapi.repositories.FeedbackRepository;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 import net.tsg_projects.feedbackapi.services.FeedbackService;
 
+
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class FeedbackServiceTest {
 

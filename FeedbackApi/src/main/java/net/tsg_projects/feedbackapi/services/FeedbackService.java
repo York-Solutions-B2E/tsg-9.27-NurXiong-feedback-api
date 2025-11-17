@@ -17,6 +17,10 @@ import net.tsg_projects.feedbackapi.messaging.FeedbackEventPublisher;
 import net.tsg_projects.feedbackapi.repositories.FeedbackRepository;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 
+
+/**
+ * Service layer responsible for handling business logic and validation
+ */
 @Service
 public class FeedbackService {
 
@@ -30,6 +34,12 @@ public class FeedbackService {
         this.feedbackEventPublisher = feedbackEventPublisher;
     }
 
+    /**
+     *
+     * @param requestDto
+     * @return If feedback fields are valid creates feedback entity, publishes event and returns feedbackResponse
+     *          otherwise throws validation exception
+     */
     public FeedbackResponse handleFeedbackRequest(FeedbackRequest requestDto){
 
         // Will validate incoming request first
@@ -53,6 +63,12 @@ public class FeedbackService {
 
     }
 
+    /**
+     *
+     * @param requestDto
+     *
+     * Validates all request fields
+     */
     public void FeedbackValidation(FeedbackRequest requestDto){
 
         // Begin Validating incoming request
@@ -86,6 +102,11 @@ public class FeedbackService {
         }
     }
 
+    /**
+     *
+     * @param ID
+     * @return If feedback is found in repository returns entityDto otherwise throws resourceNotFount exception
+     */
     public FeedbackEntityDto getFeedback(String ID){
         try {
                 UUID entityId = UUID.fromString(ID);
@@ -113,6 +134,11 @@ public class FeedbackService {
 
     }
 
+    /**
+     *
+     * @param memberId
+     * @return If memberId has feedbacks returns list of all feedbacks otherwise return empty list
+     */
     public List<FeedbackEntityDto> getFeedbackList(String memberId){
 
        try {

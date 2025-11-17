@@ -13,11 +13,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import net.tsg_projects.feedbackapi.FeedbackMapper.FeedbackMapper;
 import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
 import net.tsg_projects.feedbackapi.messaging.FeedbackEventPublisher;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class FeedbackEventPublisherTest {
 

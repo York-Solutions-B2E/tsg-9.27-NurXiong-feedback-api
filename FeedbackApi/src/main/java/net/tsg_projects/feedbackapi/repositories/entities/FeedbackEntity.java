@@ -12,6 +12,12 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
+/**
+ *
+ * FeedbackEntity used to store feedback data into the database
+ * All relevant fields have validation
+ *
+ */
 @Entity
 @Data
 @Table(name = "feedback")
