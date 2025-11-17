@@ -70,6 +70,21 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
+  feedback-ui:
+    build:
+      context: ../../tsg-9.27-nurxiong-frontend-feedback-ui
+      dockerfile: Dockerfile
+    container_name: feedback-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - feedback-api
+    networks:
+      - feedback_network
+networks:
+  feedback_network:
+    driver: bridge
+
 
 
 volumes:
