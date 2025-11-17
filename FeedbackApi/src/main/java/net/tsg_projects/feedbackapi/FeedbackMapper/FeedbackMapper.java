@@ -8,6 +8,11 @@ import net.tsg_projects.feedbackapi.dtos.FeedbackResponse;
 import net.tsg_projects.feedbackapi.messaging.EventModel.FeedbackEvent;
 import net.tsg_projects.feedbackapi.repositories.entities.FeedbackEntity;
 
+
+/**
+ *
+ * Mapper helper class responsible for easily mapping java objects to dto's
+ */
 @Component
 public class FeedbackMapper {
 

@@ -20,7 +20,7 @@ services:
       KAFKA_NODE_ID: 1                                 # Unique node ID for this broker/controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"  # Define the KRaft quorum (single-node for dev)
       KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093" # Expose broker + controller listeners
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092" # How clients on the host reach Kafka
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092" # How clients on the host reach Kafka
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
       KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -31,6 +31,46 @@ services:
         [ "CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list" ]
       interval: 10s
       timeout: 5s
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka_ui
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      - kafka
+
+  feedback-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: feedback_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/feedbackdb
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  feedback-consumer:
+    build:
+      context: ../../tsg-9.27-NurXiong-feedback-analytics-consumer
+      dockerfile: Dockerfile
+    container_name: feedback_consumer
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+
 
 volumes:
   postgres_data:

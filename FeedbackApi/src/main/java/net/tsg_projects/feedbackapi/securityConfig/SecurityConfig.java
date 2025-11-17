@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Config class responsible for creating custom securityFilterChain
+ * disables cors, csrf, httpBasic and formLogin
+ */
 @Configuration
 public class SecurityConfig {
 

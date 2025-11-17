@@ -15,9 +15,19 @@ import net.tsg_projects.feedbackapi.Validation.ValidationError;
 import net.tsg_projects.feedbackapi.Validation.ValidationException;
 import net.tsg_projects.feedbackapi.dtos.ErrorResponse;
 
+
+/**
+ *
+ * ControllerAdvice listens for any exceptions and handles the response sent to client
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     *
+     * @param ex: Exception that was thrown
+     * @return Map of validation erros
+     */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -28,6 +38,11 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    /**
+     *
+     * @param ex: If request body was empty
+     * @return Map
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleEmptyRequestException(HttpMessageNotReadableException ex) {
         ValidationError error = new ValidationError("InvalidRequestBody", "You must provide a request body!");
@@ -36,6 +51,11 @@ public class GlobalExceptionHandler {
                 .body(Map.of("Errors", error, "Status", 400, "Timestamp", Instant.now()));
     }
 
+    /**
+     *
+     * @param ex: Exception thrown for resourceNotFound
+     * @return Map of errors
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
 //        ValidationError error = new ValidationError("ResourceNotFoundException", "Resource not found!");
@@ -48,6 +68,12 @@ public class GlobalExceptionHandler {
     }
 
 
+    /**
+     *
+     * @param ex
+     * @return Returns custom error response for the @Valid annotation on endpoint methods
+     * Used for testing controller
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = new HashMap<>();
