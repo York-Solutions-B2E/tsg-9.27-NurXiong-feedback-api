@@ -2,6 +2,7 @@ package net.tsg_projects.feedbackapi.controllerTest;
 
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.tsg_projects.feedbackapi.Validation.ValidationError;
+import net.tsg_projects.feedbackapi.Validation.ValidationException;
 import net.tsg_projects.feedbackapi.controllers.FeedbackController;
 import net.tsg_projects.feedbackapi.dtos.FeedbackEntityDto;
 import net.tsg_projects.feedbackapi.dtos.FeedbackRequest;
@@ -147,17 +150,20 @@ public class FeedbackControllerTest {
 
     @Test
     public void PostFeedback_ValidationError_ShouldReturn400() throws Exception {
-        FeedbackRequest mockRequest = new FeedbackRequest("", "", 6, "");
+
+        //Arrange
+        List<ValidationError> errors = List.of(new ValidationError("memberId", "Required"));
+        when(feedbackService.handleFeedbackRequest(any())).thenThrow(new ValidationException(errors));
+        FeedbackRequest mockRequest = new FeedbackRequest("", "Dr. York", 4, "test");
 
         mockMvc.perform(post("/api/v1/feedback").
                 contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(mockRequest)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Validation Failed @ Controller"))
-                .andExpect(jsonPath("$.errors").isMap());
+                .andExpect(jsonPath("$.Errors[0].field").value("memberId"))
+                .andExpect(jsonPath("$.Errors[0].message").value("Required"));
 
-        verifyNoInteractions(feedbackService);
-
+        verify(feedbackService, times(1)).handleFeedbackRequest(any());
     }
 
     @Test

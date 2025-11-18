@@ -42,7 +42,7 @@ public class FeedbackController {
                                         schema = @Schema(implementation = FeedbackResponse.class) ) })
     @Operation(summary = "Post member feedback, valid payload returns feedback response")
     @PostMapping("/feedback")
-    public ResponseEntity<FeedbackResponse> postFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest){
+    public ResponseEntity<FeedbackResponse> postFeedback(@RequestBody FeedbackRequest feedbackRequest){
         FeedbackResponse response = feedbackService.handleFeedbackRequest(feedbackRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -60,7 +60,7 @@ public class FeedbackController {
     @Operation(summary = "Get single Feedback using Path variable Id. Returns feedback response")
     @GetMapping("/feedback/{id}")
     public ResponseEntity<Map<String, FeedbackEntityDto>> getFeedbackById(
-             @Valid @NotBlank @PathVariable String id){
+             @PathVariable String id){
         FeedbackEntityDto response  = feedbackService.getFeedback(id);
         return ResponseEntity.status(200).body(Map.of("Feedback", response));
     }

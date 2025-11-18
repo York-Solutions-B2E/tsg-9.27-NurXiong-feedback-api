@@ -67,20 +67,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(200).body(Map.of("NoFeedbacks", errorJson, "Status", 200, "Timestamp", Instant.now()));
     }
 
-
-    /**
-     *
-     * @param ex
-     * @return Returns custom error response for the @Valid annotation on endpoint methods
-     * Used for testing controller
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, Object> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
-            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        });
-        ErrorResponse error = new ErrorResponse("Validation Failed @ Controller", errors);
-        return ResponseEntity.status(400).body(error);
-    }
 }
