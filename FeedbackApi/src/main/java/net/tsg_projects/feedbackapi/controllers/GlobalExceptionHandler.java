@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
                 "Field", "Resource not found",
                 "Message", ex.getMessage()
         );
-        return ResponseEntity.status(200).body(Map.of("NoFeedback", errorJson, "Status", 200, "Timestamp", Instant.now()));
+        return ResponseEntity.status(404).body(Map.of("NoFeedback", errorJson, "Status", 404, "Timestamp", Instant.now()));
     }
 
 }
