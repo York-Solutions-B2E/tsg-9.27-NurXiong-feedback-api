@@ -167,10 +167,16 @@ public class FeedbackControllerTest {
     }
 
     @Test
-    public void GetFeedbackById_MissingPathVariable_ShouldReturn400() throws Exception {
-        mockMvc.perform(get("/api/v1/feedback/ "))
-                .andExpect(status().isBadRequest());
-        verifyNoInteractions(feedbackService);
+    public void GetFeedbackById_InvalidPathVariable_ShouldReturn400() throws Exception {
+        List<ValidationError> errors = List.of(new ValidationError("Feedback ID", "Invalid UUID format or empty ID"));
+        when(feedbackService.getFeedback(any())).thenThrow(new ValidationException(errors));
+        mockMvc.perform(get("/api/v1/feedback/ ")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.Errors[0].field").value("Feedback ID"))
+                .andExpect(jsonPath("$.Errors[0].message").value("Invalid UUID format or empty ID"));
+        verify(feedbackService, times(1)).getFeedback(any());
+
     }
 
 }

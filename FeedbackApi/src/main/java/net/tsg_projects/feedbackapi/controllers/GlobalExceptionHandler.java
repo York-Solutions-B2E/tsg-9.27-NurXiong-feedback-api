@@ -61,10 +61,9 @@ public class GlobalExceptionHandler {
 //        ValidationError error = new ValidationError("ResourceNotFoundException", "Resource not found!");
         Map<String, Object> errorJson = Map.of(
                 "Field", "Resource not found",
-                "Message", ex.getMessage(),
-                "EmptyList", List.of()
+                "Message", ex.getMessage()
         );
-        return ResponseEntity.status(200).body(Map.of("NoFeedbacks", errorJson, "Status", 200, "Timestamp", Instant.now()));
+        return ResponseEntity.status(200).body(Map.of("NoFeedback", errorJson, "Status", 200, "Timestamp", Instant.now()));
     }
 
 }
