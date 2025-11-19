@@ -170,7 +170,7 @@ public class FeedbackControllerTest {
     public void GetFeedbackById_InvalidPathVariable_ShouldReturn400() throws Exception {
         List<ValidationError> errors = List.of(new ValidationError("Feedback ID", "Invalid UUID format or empty ID"));
         when(feedbackService.getFeedback(any())).thenThrow(new ValidationException(errors));
-        mockMvc.perform(get("/api/v1/feedback/ ")
+        mockMvc.perform(get("/api/v1/feedback/ ") // Empty id or non uuid value yields 400 response code from server
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.Errors[0].field").value("Feedback ID"))
